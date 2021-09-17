@@ -33,7 +33,6 @@ def login():
         user = cur.fetchall()
         session['user_id'] = user[0][0]
         session['user_name'] = user[0][1]
-        print(session)
         cur.close()
         if user:
             return redirect(url_for('get_flows'))
@@ -104,7 +103,8 @@ def save_history():
         
         now = datetime.now()
         # dd/mm/YY H:M:S
-        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        # dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
         cursor = mysql.connection.cursor()
         cursor.execute('INSERT INTO tb_historial (id_tipo_incidencia, descripcion, id_proceso, fecha, id_usuario_creador, id_usuario_afectado, justificacion, estado, gravedad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
@@ -112,6 +112,10 @@ def save_history():
         mysql.connection.commit()
 
         return redirect(url_for('get_flows'))
+
+@app.route('/created-incidences')
+def get_created_incidences():
+    return render_template('created-incidences.html')
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

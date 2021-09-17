@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <h3 style="margin-top: 50px;">{{data.flow.1}}</h3>
+        <div class="flows row">
+            <div class="col-md-12 col-lg-12">
+                <img class="my-flow-image" src="{{ url_for('static', filename=data.flow.2) }}"">
+            </div>
+            <hr class="space-top">
+            <div class="col-md-12 col-lg-12">
+                <h3>Crear incidencia</h3>
+                <div class="col-md-12 col-lg-12">
+                    <form action="" method="POST">
+                        <div class="col-12 space-top">
+                            <label class="form-label">Proceso</label>
+                            <select class="form-select process-select" aria-label="Seleccionar proceso" name="id_proceso">
+                                <option selected>Selecciona un proceso</option>
+                                {% for process in data.processes %}
+                                    <option value="{{process.0}}">Flujo: {{ process.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 space-top">
+                            <label class="form-label">Usuario</label>
+                            <select class="form-select user-select" aria-label="Seleccionar proceso" name="id_usuario_afectado">
+                                <option selected>Seleccione un usuario</option>
+                            </select>
+                        </div>
+                        <div class="col-12 space-top">
+                            <label class="form-label">Tipo de incidencia</label>
+                            <select class="form-select process-select" aria-label="Seleccionar incidencia" name="id_tipo_incidencia">
+                                <option selected>Selecciona un tipo de incidencia</option>
+                                {% for type in data.types %}
+                                    <option value="{{type.0}}">{{ type.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 space-top">
+                            <label class="form-label">Descripcion</label>
+                            <textarea class="form-control" name="descripcion" rows="4"></textarea>
+                        </div>
+                        <div class="col-12 space-top">
+                            <label class="form-label">Tipo de incidencia</label>
+                            <select class="form-select process-select" aria-label="Seleccionar incidencia" name="id_tipo_incidencia">
+                                <option selected>Selecciona gravedad</option>
+                                <option value="bajo">Bajo</option>
+                                <option value="medio">Medio</option>
+                                <option value="alto">Alto</option>
+                                <option value="critico">Crítico</option>
+                            </select>
+                        </div>
+                        <div class="col-12 space-top">
+                            <button type="button" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

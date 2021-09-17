@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <h3 style="margin-top: 50px;">Flujos</h3>
+        <div class="flows row">
+            {% for flow in flows %}
+            <div class="flow-container col-md-4 col-lg-4">
+                <a href="/flow-detail/{{flow.0}}" style="color: #5c5c5d;text-decoration: none;">
+                    <img class="my-flow-image" src="{{ url_for('static', filename=flow.2) }}">
+                    <h5 class="center-text">{{flow.1}}</h5>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

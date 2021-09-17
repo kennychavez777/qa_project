@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row">
-        <h3 style="margin-top: 50px;">{{data.flow.1}}</h3>
+        <h3 style="margin-top: 50px;">Flujo: {{data.flow.1}}</h3>
         <div class="flows row">
             <div class="col-md-12 col-lg-12">
                 <img class="my-flow-image" src="{{ url_for('static', filename=data.flow.2) }}"">
@@ -12,13 +12,13 @@
             <div class="col-md-12 col-lg-12">
                 <h3>Crear incidencia</h3>
                 <div class="col-md-12 col-lg-12">
-                    <form action="" method="POST">
+                    <form action="/save-history" method="POST">
                         <div class="col-12 space-top">
                             <label class="form-label">Proceso</label>
                             <select class="form-select process-select" aria-label="Seleccionar proceso" name="id_proceso">
                                 <option selected>Selecciona un proceso</option>
                                 {% for process in data.processes %}
-                                    <option value="{{process.0}}">Flujo: {{ process.1 }}</option>
+                                    <option value="{{process.0}}">{{ process.1 }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-12 space-top">
                             <label class="form-label">Tipo de incidencia</label>
-                            <select class="form-select process-select" aria-label="Seleccionar incidencia" name="id_tipo_incidencia">
+                            <select class="form-select" aria-label="Seleccionar incidencia" name="id_tipo_incidencia">
                                 <option selected>Selecciona un tipo de incidencia</option>
                                 {% for type in data.types %}
                                     <option value="{{type.0}}">{{ type.1 }}</option>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-12 space-top">
                             <label class="form-label">Tipo de incidencia</label>
-                            <select class="form-select process-select" aria-label="Seleccionar incidencia" name="id_tipo_incidencia">
+                            <select class="form-select" aria-label="Seleccionar incidencia" name="gravedad">
                                 <option selected>Selecciona gravedad</option>
                                 <option value="bajo">Bajo</option>
                                 <option value="medio">Medio</option>
@@ -52,7 +52,7 @@
                             </select>
                         </div>
                         <div class="col-12 space-top">
-                            <button type="button" class="btn btn-primary">Guardar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
                 </div>

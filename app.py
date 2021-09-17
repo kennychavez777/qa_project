@@ -2,6 +2,7 @@
 #venv\Scripts\activate
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
+from datetime import datetime
 import json
 
 # Mysql connection
@@ -22,18 +23,6 @@ def index():
 def get_index():
     return render_template('index.html')
 
-@app.route('/add_contact', methods=['POST'])
-def add_contact():
-    if request.method == 'POST':
-        fullname = request.form['fullname']
-        phone = request.form['phone']
-        email = request.form['email']
-        cursor = mysql.connection.cursor() 
-        cursor.execute('INSERT INTO contacts (nombre, phone, email) VALUES (%s, %s, %s)', (fullname, phone, email))
-        mysql.connection.commit()
-        
-        return redirect(url_for('index'))
-
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
@@ -50,18 +39,6 @@ def login():
             return redirect(url_for('get_flows'))
         else:
             return 'No entro'
-
-@app.route('/edit')
-def edit_contact():
-    return 'edit'
-
-@app.route('/delete')
-def delete_contact():
-    return 'delete'
-
-@app.route('/dashboard')
-def get_dashboard():
-    return render_template('dashboard.html')
 
 @app.route('/flows')
 def get_flows():
@@ -115,12 +92,26 @@ def logout():
     session.pop('user_name', None)
     return render_template('login.html')
 
-# @app.route('/save-history', methods=['POST'])
-# def save_history():
-#     if request.method == 'POST':
-#         fullname = request.form['fullname']
-#         phone = request.form['phone']
-#         email = request.form['email']
+@app.route('/save-history', methods=['POST'])
+def save_history():
+    if request.method == 'POST':
+        id_proceso = request.form['id_proceso']
+        id_usuario_afectado = request.form['id_usuario_afectado']
+        id_tipo_incidencia = request.form['id_tipo_incidencia']
+        descripcion = request.form['descripcion']
+        gravedad = request.form['gravedad']
+        id_usuario_creador = session['user_id']
+        
+        now = datetime.now()
+        # dd/mm/YY H:M:S
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+
+        cursor = mysql.connection.cursor()
+        cursor.execute('INSERT INTO tb_historial (id_tipo_incidencia, descripcion, id_proceso, fecha, id_usuario_creador, id_usuario_afectado, justificacion, estado, gravedad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
+        (id_tipo_incidencia, descripcion, id_proceso, dt_string, id_usuario_creador, id_usuario_afectado, None, 'creado', gravedad))
+        mysql.connection.commit()
+
+        return redirect(url_for('get_flows'))
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

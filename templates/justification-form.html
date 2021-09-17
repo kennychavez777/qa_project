@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block body %}
+<style>
+    p {
+        font-size: 16px;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <h3 style="margin-top: 50px;">Detalle de incidencia </h3>
+        <div class=" row col-md-12 col-lg-12 space-top">
+            <div class="col-md-12 col-lg-12">
+                <p><strong>Asignado por: </strong>{{ history.3 }}</p>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <p><strong>Flujo: </strong>{{ history.8 }}</p>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <p><strong>Proceso: </strong>{{ history.0 }}</p>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <p><strong>Tipo: </strong>{{ history.1 }}</p>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <p><strong>Prioridad: </strong>{{ history.6 }}</p>
+            </div>
+            <div class="col-md-12 col-lg-12">
+                <p><strong>Descripción: </strong>{{ history.2 }}</p>
+            </div>
+            <div class="col-md-12 col-lg-12">
+                <button type="button" class="btn btn-success" >Aceptar</button>
+                <button type="button" class="btn btn-danger">Rechazar</button>
+            </div>
+            <hr class="space-top">
+            <div class="col-md-12 col-lg-12">
+                <form action="">
+                    <p><strong>Justificación: </strong></p>
+                    <textarea class="form-control" name="descripcion" rows="4" readonly="true"></textarea>
+                    <button type="button" class="btn btn-primary space-top" disabled="true">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

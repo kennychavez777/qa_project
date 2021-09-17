@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row">
-        <h3 style="margin-top: 50px;">Incidencias creadas</h3>
+        <h3 style="margin-top: 50px;">Mis Incidencias</h3>
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <table id="example" class="table table-striped" style="width:100%">
@@ -14,7 +14,9 @@
                             <th>Descripción</th>
                             <th>Asignado por</th>
                             <th>Fecha</th>
-                            <th>Gravedad</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -26,6 +28,10 @@
                                 <td>{{ incidence.3 }}</td>
                                 <td>{{ incidence.4 }}</td>
                                 <td>{{ incidence.5 }}</td>
+                                <td>{{ incidence.6}}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="/justification/{{ incidence.7 }}">Revisar</a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -36,7 +42,9 @@
                             <th>Descripción</th>
                             <th>Asignado a</th>
                             <th>Fecha</th>
-                            <th>Gravedad</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
                         </tr>
                     </tfoot>
                 </table>

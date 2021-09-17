@@ -49,7 +49,11 @@ def get_flows():
 
 @app.route('/my-incidences')
 def get_my_incidences():
-    return render_template('my-incidences.html')
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT tbp.nombre as 'process_name', tbti.nombre as 'type', tbh.descripcion as 'description', tbu.nombre as 'user_name', tbh.fecha, tbh.gravedad FROM tb_historial tbh INNER JOIN tb_tipo_incidencia tbti ON tbh.id_tipo_incidencia = tbti.id_tipo_incidencia INNER JOIN tb_usuarios tbu ON tbh.id_usuario_creador = tbu.id_usuario INNER JOIN tb_procesos tbp ON tbh.id_proceso = tbp.id_proceso WHERE tbh.id_usuario_afectado = %s", [session['user_id']])
+    created_incidences = cursor.fetchall()
+    print(created_incidences)
+    return render_template('created-incidences.html', incidences=created_incidences)
 
 @app.route('/flow-detail/<id>', methods=['GET'])
 def get_flow_detail(id):
@@ -115,7 +119,11 @@ def save_history():
 
 @app.route('/created-incidences')
 def get_created_incidences():
-    return render_template('created-incidences.html')
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT tbp.nombre as 'process_name', tbti.nombre as 'type', tbh.descripcion as 'description', tbu.nombre as 'user_name', tbh.fecha, tbh.gravedad FROM tb_historial tbh INNER JOIN tb_tipo_incidencia tbti ON tbh.id_tipo_incidencia = tbti.id_tipo_incidencia INNER JOIN tb_usuarios tbu ON tbh.id_usuario_afectado = tbu.id_usuario INNER JOIN tb_procesos tbp ON tbh.id_proceso = tbp.id_proceso WHERE id_usuario_creador = %s", [session['user_id']])
+    created_incidences = cursor.fetchall()
+    print(created_incidences)
+    return render_template('created-incidences.html', incidences=created_incidences)
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

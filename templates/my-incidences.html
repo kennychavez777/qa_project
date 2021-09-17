@@ -1,5 +1,53 @@
 {% extends "layout.html" %}
 {% block body %}
-This is my my incidences
 
+<div class="container">
+    <div class="row">
+        <h3 style="margin-top: 50px;">Incidencias creadas</h3>
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Proceso</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Asignado por</th>
+                            <th>Fecha</th>
+                            <th>Gravedad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for incidence in incidences %}
+                            <tr>
+                                <td>{{ incidence.0 }}</td>
+                                <td>{{ incidence.1 }}</td>
+                                <td>{{ incidence.2 }}</td>
+                                <td>{{ incidence.3 }}</td>
+                                <td>{{ incidence.4 }}</td>
+                                <td>{{ incidence.5 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Proceso</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Asignado a</th>
+                            <th>Fecha</th>
+                            <th>Gravedad</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+</script>
 {% endblock %}

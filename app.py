@@ -1,8 +1,10 @@
 #Set-ExecutionPolicy Unrestricted -Scope Process
 #venv\Scripts\activate
+from MySQLdb import cursors
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 from datetime import datetime
+from flask_mail import Mail, Message
 import json
 
 # Mysql connection
@@ -12,6 +14,17 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'qa_project'
 mysql = MySQL(app)
+
+# Email settings
+mail = Mail(app)
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'example@gmail.com'
+app.config['MAIL_PASSWORD'] = '*******'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 # Settings
 app.secret_key = 'secretkey'
@@ -52,7 +65,7 @@ def get_my_incidences():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT tbp.nombre as 'process_name', tbti.nombre as 'type', tbh.descripcion as 'description', tbu.nombre as 'user_name', tbh.fecha, tbh.gravedad, tbh.estado, tbh.id_historial FROM tb_historial tbh INNER JOIN tb_tipo_incidencia tbti ON tbh.id_tipo_incidencia = tbti.id_tipo_incidencia INNER JOIN tb_usuarios tbu ON tbh.id_usuario_creador = tbu.id_usuario INNER JOIN tb_procesos tbp ON tbh.id_proceso = tbp.id_proceso WHERE tbh.id_usuario_afectado = %s", [session['user_id']])
     created_incidences = cursor.fetchall()
-    print(created_incidences)
+    
     return render_template('my-incidences.html', incidences=created_incidences)
 
 @app.route('/flow-detail/<id>', methods=['GET'])
@@ -106,23 +119,21 @@ def save_history():
         id_usuario_creador = session['user_id']
         
         now = datetime.now()
-        # dd/mm/YY H:M:S
-        # dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
         cursor = mysql.connection.cursor()
         cursor.execute('INSERT INTO tb_historial (id_tipo_incidencia, descripcion, id_proceso, fecha, id_usuario_creador, id_usuario_afectado, justificacion, estado, gravedad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
         (id_tipo_incidencia, descripcion, id_proceso, dt_string, id_usuario_creador, id_usuario_afectado, None, 'creado', gravedad))
         mysql.connection.commit()
-
-        return redirect(url_for('get_flows'))
+        
+        return redirect(url_for('get_created_incidences'))
 
 @app.route('/created-incidences')
 def get_created_incidences():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT tbp.nombre as 'process_name', tbti.nombre as 'type', tbh.descripcion as 'description', tbu.nombre as 'user_name', tbh.fecha, tbh.gravedad, tbh.estado FROM tb_historial tbh INNER JOIN tb_tipo_incidencia tbti ON tbh.id_tipo_incidencia = tbti.id_tipo_incidencia INNER JOIN tb_usuarios tbu ON tbh.id_usuario_afectado = tbu.id_usuario INNER JOIN tb_procesos tbp ON tbh.id_proceso = tbp.id_proceso WHERE id_usuario_creador = %s", [session['user_id']])
     created_incidences = cursor.fetchall()
-    print(created_incidences)
+    
     return render_template('created-incidences.html', incidences=created_incidences)
 
 @app.route('/justification/<id>', methods=['GET'])
@@ -133,6 +144,29 @@ def get_justification_form(id):
 
     print(history)
     return render_template('justification-form.html', history=history[0])
+
+@app.route('/save-justificaton', methods=['POST'])
+def save_justification():
+    if request.method == 'POST':
+        history_id = request.form['history_id']
+        state = request.form['response']
+        justification = request.form['justificacion']
+        cursor = mysql.connection.cursor()
+        cursor.execute("UPDATE tb_historial SET justificacion = %s, estado=%s WHERE id_historial = %s", [justification, state, history_id])
+        mysql.connection.commit()
+
+        return redirect(url_for('get_my_incidences'))
+
+def send_email(id_usuario_afectado):
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM tb_usuarios WHERE id_usuario=%s', [id_usuario_afectado])
+    user = cursor.fetchone()
+
+    print(user)
+    msg = Message('Nueva incidencia', sender='hospitalnotificationsproject@gmail.com', recipients=[user[3]])
+    msg.html = 'Estimado ' + user[1] + ', <br><br>Se ha creado una nueva incidencia a su nombre, por favor entrar al sistema y revisar. <br><br>¡Saludos!'
+    mail.send(msg)
+    
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

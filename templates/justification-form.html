@@ -27,16 +27,14 @@
             <div class="col-md-12 col-lg-12">
                 <p><strong>Descripción: </strong>{{ history.2 }}</p>
             </div>
-            <div class="col-md-12 col-lg-12">
-                <button type="button" class="btn btn-success" >Aceptar</button>
-                <button type="button" class="btn btn-danger">Rechazar</button>
-            </div>
             <hr class="space-top">
             <div class="col-md-12 col-lg-12">
-                <form action="">
+                <form action="/save-justificaton" method="POST">
+                    <input type="hidden" name="history_id" value="{{ history.7 }}">
                     <p><strong>Justificación: </strong></p>
-                    <textarea class="form-control" name="descripcion" rows="4" readonly="true"></textarea>
-                    <button type="button" class="btn btn-primary space-top" disabled="true">Guardar</button>
+                    <textarea class="form-control" name="justificacion" rows="4"></textarea>
+                    <button type="submit" class="btn btn-success space-top" name="response" value="Aceptado">Aceptar</button>
+                    <button type="submit" class="btn btn-danger space-top" name="response" value="Rechazado">Rechazar</button>
                 </form>
             </div>
         </div>

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <h3 style="margin-top: 50px;">Sobre nosotros</h3>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <h4>Misión</h4>
+            <p>{{ data.0.2 }}</p>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <h4>Visión</h4>
+            <p>{{ data.0.3 }}</p>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <h4>Valores</h4>
+            <ul>
+                {% for value in data.1 %}
+                    <li>{{ value }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

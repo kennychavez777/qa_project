@@ -166,7 +166,16 @@ def send_email(id_usuario_afectado):
     msg = Message('Nueva incidencia', sender='hospitalnotificationsproject@gmail.com', recipients=[user[3]])
     msg.html = 'Estimado ' + user[1] + ', <br><br>Se ha creado una nueva incidencia a su nombre, por favor entrar al sistema y revisar. <br><br>¡Saludos!'
     mail.send(msg)
-    
+
+@app.route('/about-us')
+def get_about_us():
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM tb_config WHERE id=1')
+    about = cursor.fetchone()
+
+    values = about[4].split(',')
+
+    return render_template('about_us.html', data=[about, values])
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

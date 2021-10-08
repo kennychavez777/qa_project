@@ -20,8 +20,8 @@ mail = Mail(app)
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'example@gmail.com'
-app.config['MAIL_PASSWORD'] = '*******'
+app.config['MAIL_USERNAME'] = 'hospitalnotificationsproject@gmail.com'
+app.config['MAIL_PASSWORD'] = 'P4$$w0rD!!'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
@@ -55,7 +55,7 @@ def login():
 @app.route('/flows')
 def get_flows():
     cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM tb_flujo')
+    cursor.execute('SELECT * FROM tb_flujo WHERE id_flujo in (1,2,3,4,5)')
     data = cursor.fetchall()
     cursor.close()
     return render_template('flows.html', flows = data)
@@ -121,9 +121,10 @@ def save_history():
         now = datetime.now()
         dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
+        send_email(id_usuario_afectado)
         cursor = mysql.connection.cursor()
         cursor.execute('INSERT INTO tb_historial (id_tipo_incidencia, descripcion, id_proceso, fecha, id_usuario_creador, id_usuario_afectado, justificacion, estado, gravedad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
-        (id_tipo_incidencia, descripcion, id_proceso, dt_string, id_usuario_creador, id_usuario_afectado, None, 'creado', gravedad))
+        (id_tipo_incidencia, descripcion, id_proceso, dt_string, id_usuario_creador, id_usuario_afectado, None, 'Creado', gravedad))
         mysql.connection.commit()
         
         return redirect(url_for('get_created_incidences'))
@@ -162,7 +163,6 @@ def send_email(id_usuario_afectado):
     cursor.execute('SELECT * FROM tb_usuarios WHERE id_usuario=%s', [id_usuario_afectado])
     user = cursor.fetchone()
 
-    print(user)
     msg = Message('Nueva incidencia', sender='hospitalnotificationsproject@gmail.com', recipients=[user[3]])
     msg.html = 'Estimado ' + user[1] + ', <br><br>Se ha creado una nueva incidencia a su nombre, por favor entrar al sistema y revisar. <br><br>¡Saludos!'
     mail.send(msg)
@@ -176,6 +176,14 @@ def get_about_us():
     values = about[4].split(',')
 
     return render_template('about_us.html', data=[about, values])
+
+@app.route('/new-flows')
+def get__new_flows():
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM tb_flujo WHERE id_flujo in (6,7,8,9,10)')
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('flows.html', flows = data)
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

@@ -3,22 +3,42 @@
 
 <div class="container">
     <div class="row">
-        <h3 style="margin-top: 50px;">Sobre nosotros</h3>
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <h4>Misión</h4>
-            <p>{{ data.0.2 }}</p>
+        <div class="col-md-9">
+            <h3 style="margin-top: 50px;">Sobre nosotros</h3>
         </div>
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <h4>Visión</h4>
-            <p>{{ data.0.3 }}</p>
+        <div class="col-md-3">
+            <img style="width: 100%;" src="{{ url_for('static', filename='img/logo.jpg') }}" alt="">
         </div>
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <h4>Valores</h4>
-            <ul>
-                {% for value in data.1 %}
-                    <li>{{ value }}</li>
-                {% endfor %}
-            </ul>
+        <div class="col-lg-12 col-md-12 col-sm-12 row">
+            <h5>Misión</h5>
+            <div class="col-md-6 col-lg-6">
+                <p style="font-size: 17px;">{{ data.0.2 }}</p>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <img style="width: 100%;" src="https://www.clinicasanpablo.co/fotospages/mac_nuestros_valores_1549384370.jpg" alt="">
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 row medium-space-top">
+            <div class="col-md-6 col-lg-6">
+                <img style="width: 100%;" src="https://static.wixstatic.com/media/c8f9d0_82ca2d21a85b41cea60eec36059479c5.jpg/v1/fill/w_756,h_320,al_c,q_80,usm_0.66_1.00_0.01/c8f9d0_82ca2d21a85b41cea60eec36059479c5.webp" alt="">
+            </div>
+            <div class="col-md-6">
+                <h5>Visión</h5>
+                <p style="font-size: 17px;">{{ data.0.3 }}</p>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 row medium-space-top">
+            <h5>Valores</h5>
+            <div class="col-md-6 col-lg-6">
+                <ul>
+                    {% for value in data.1 %}
+                        <li style="font-size: 17px;">{{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <img style="width: 100%;"  src="https://static.wixstatic.com/media/00cf4b_71f0e96f34f54c0e9facfccab28d10ec~mv2.jpg/v1/fill/w_640,h_400,al_c,q_80,usm_0.66_1.00_0.01/00cf4b_71f0e96f34f54c0e9facfccab28d10ec~mv2.webp" alt="">
+            </div>
         </div>
     </div>
 </div>

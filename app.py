@@ -74,11 +74,11 @@ def get_flow_detail(id):
     if id:
         cursor = mysql.connection.cursor()
         # Get flow data
-        cursor.execute('SELECT * FROM tb_flujo WHERE id_flujo=%s', (id))
+        cursor.execute('SELECT * FROM tb_flujo WHERE id_flujo=%s', [id])
         flow = cursor.fetchall()
         
         # Get process data
-        cursor.execute('SELECT * FROM tb_procesos WHERE id_flujo=%s', (id))
+        cursor.execute('SELECT * FROM tb_procesos WHERE id_flujo=%s', [id])
         processes = cursor.fetchall()
         
         # Get type
@@ -88,6 +88,7 @@ def get_flow_detail(id):
         cursor.close()
 
         data['flow'] = flow[0]
+        print(flow[0])
         data['processes'] = processes
         data['types'] = types
         
@@ -180,10 +181,10 @@ def get_about_us():
 @app.route('/new-flows')
 def get__new_flows():
     cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM tb_flujo WHERE id_flujo in (6,7,8,9,10)')
+    cursor.execute('SELECT * FROM tb_flujo WHERE id_flujo in (6,7,8,9,10,11)')
     data = cursor.fetchall()
     cursor.close()
-    return render_template('flows.html', flows = data)
+    return render_template('new-flows.html', flows = data)
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

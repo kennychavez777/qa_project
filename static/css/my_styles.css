@@ -1,7 +1,8 @@
 .my-center {
+    border-radius: 25px;
     width: 450px;
-    height: 450px;
-    background-color: #eaeaea;
+    height: 366px;
+    background-color: #0000007a;
     position: absolute; /*Can also be `fixed`*/
     left: 0;
     right: 0;

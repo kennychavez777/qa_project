@@ -6,7 +6,13 @@
         <h3 style="margin-top: 50px;">Flujo: {{data.flow.1}}</h3>
         <div class="flows row">
             <div class="col-md-12 col-lg-12">
-                <img class="my-flow-image" src="{{ url_for('static', filename=data.flow.2) }}"">
+                <img class="my-flow-image" src="{{ url_for('static', filename=data.flow.2) }}">
+                {% if data.flow.3 %}
+                <div class="alert alert-info" role="alert">
+                    <h4 class="alert-heading">Mejora</h4>
+                    <p>{{ data.flow.3 }}</p>
+                </div>
+                {% endif %}
             </div>
             <hr class="space-top">
             <div class="col-md-12 col-lg-12">

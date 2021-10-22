@@ -20,7 +20,7 @@ mail = Mail(app)
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'hospitalnotificationsproject@gmail.com'
+app.config['MAIL_USERNAME'] = 'hnotifications1461@gmail.com'
 app.config['MAIL_PASSWORD'] = 'P4$$w0rD!!'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
@@ -43,11 +43,20 @@ def login():
         password = request.form['password']
         cur = mysql.connection.cursor()
         cur.execute('SELECT * FROM tb_usuarios WHERE correo=%s and password=%s', (email, password))
-        user = cur.fetchall()
-        session['user_id'] = user[0][0]
-        session['user_name'] = user[0][1]
-        cur.close()
-        if user:
+        user = cur.fetchone()
+        print(user)
+        if (user):
+            session['user_id'] = user[0]
+            session['user_name'] = user[1]
+
+            cur.execute('SELECT count(*) FROM tb_flujo WHERE id_usuario = %s', [user[0]])
+            encargado = cur.fetchone()
+            
+            if encargado[0] > 0:
+                session['is_encargado'] = True
+            else:
+                session['is_encargado'] = False
+            
             return redirect(url_for('get_flows'))
         else:
             return 'No entro'
@@ -141,7 +150,7 @@ def get_created_incidences():
 @app.route('/justification/<id>', methods=['GET'])
 def get_justification_form(id):
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT tbp.nombre as 'process_name', tbti.nombre as 'type', tbh.descripcion as 'description', tbu.nombre as 'user_name', tbh.fecha, tbh.gravedad, tbh.estado, tbh.id_historial, tbf.nombre as 'flow_name' FROM tb_historial tbh INNER JOIN tb_tipo_incidencia tbti ON tbh.id_tipo_incidencia = tbti.id_tipo_incidencia INNER JOIN tb_usuarios tbu ON tbh.id_usuario_creador = tbu.id_usuario INNER JOIN tb_procesos tbp ON tbh.id_proceso = tbp.id_proceso INNER JOIN tb_flujo tbf ON tbp.id_flujo = tbf.id_flujo WHERE id_historial = %s", [id])
+    cursor.execute("SELECT tbp.nombre as 'process_name', tbti.nombre as 'type', tbh.descripcion as 'description', tbu.nombre as 'user_name', tbh.fecha, tbh.gravedad, tbh.estado, tbh.id_historial, tbf.nombre as 'flow_name', tbh.justificacion FROM tb_historial tbh INNER JOIN tb_tipo_incidencia tbti ON tbh.id_tipo_incidencia = tbti.id_tipo_incidencia INNER JOIN tb_usuarios tbu ON tbh.id_usuario_creador = tbu.id_usuario INNER JOIN tb_procesos tbp ON tbh.id_proceso = tbp.id_proceso INNER JOIN tb_flujo tbf ON tbp.id_flujo = tbf.id_flujo WHERE id_historial = %s", [id])
     history = cursor.fetchall()
 
     print(history)
@@ -185,6 +194,14 @@ def get__new_flows():
     data = cursor.fetchall()
     cursor.close()
     return render_template('new-flows.html', flows = data)
+
+@app.route('/flow-incidences')
+def get_incidences_by_flow():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT tbp.nombre as 'process_name', tbti.nombre as 'type', tbh.descripcion as 'description', tbu.nombre as 'user_name', tbh.fecha, tbh.gravedad, tbh.estado, tbh.id_historial FROM tb_historial tbh INNER JOIN tb_tipo_incidencia tbti ON tbh.id_tipo_incidencia = tbti.id_tipo_incidencia  INNER JOIN tb_usuarios tbu ON tbh.id_usuario_creador = tbu.id_usuario INNER JOIN tb_procesos tbp ON tbh.id_proceso = tbp.id_proceso INNER JOIN tb_flujo tbfl ON tbfl.id_usuario = tbu.id_usuario WHERE tbfl.id_usuario = %s", [session['user_id']])
+    flow_incidences = cursor.fetchall()
+    
+    return render_template('flow-incidences.html', incidences=flow_incidences)
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

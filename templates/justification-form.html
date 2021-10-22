@@ -22,7 +22,10 @@
                 <p><strong>Tipo: </strong>{{ history.1 }}</p>
             </div>
             <div class="col-md-6 col-lg-6">
-                <p><strong>Prioridad: </strong>{{ history.6 }}</p>
+                <p><strong>Estado: </strong>{{ history.6 }}</p>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <p><strong>Prioridad: </strong>{{ history.5 }}</p>
             </div>
             <div class="col-md-12 col-lg-12">
                 <p><strong>Descripción: </strong>{{ history.2 }}</p>
@@ -32,9 +35,15 @@
                 <form action="/save-justificaton" method="POST">
                     <input type="hidden" name="history_id" value="{{ history.7 }}">
                     <p><strong>Justificación: </strong></p>
+                    {% if history.9 %}
+                    <textarea class="form-control" name="justificacion" rows="4" disabled="true">{{ history.9 }}</textarea>
+                    <button type="submit" class="btn btn-success space-top" name="response" value="Aceptado" disabled="true">Aceptar</button>
+                    <button type="submit" class="btn btn-danger space-top" name="response" value="Rechazado" disabled="true">Rechazar</button>
+                    {% else %}
                     <textarea class="form-control" name="justificacion" rows="4"></textarea>
-                    <button type="submit" class="btn btn-success space-top" name="response" value="Aceptado">Aceptar</button>
+                    <button type="submit" class="btn btn-success space-top" name="response" value="Aceptado" >Aceptar</button>
                     <button type="submit" class="btn btn-danger space-top" name="response" value="Rechazado">Rechazar</button>
+                    {% endif %}
                 </form>
             </div>
         </div>

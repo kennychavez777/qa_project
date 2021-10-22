@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <h3 style="margin-top: 50px;">Incidencias por flujo</h3>
+        <p>Esta pantalla muestra las incidencias de los flujos que el usuario tiene asignado como encargado.</p>
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Proceso</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Asignado por</th>
+                            <th>Fecha</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for incidence in incidences %}
+                            <tr>
+                                <td>{{ incidence.0 }}</td>
+                                <td>{{ incidence.1 }}</td>
+                                <td>{{ incidence.2 }}</td>
+                                <td>{{ incidence.3 }}</td>
+                                <td>{{ incidence.4 }}</td>
+                                <td>{{ incidence.5 }}</td>
+                                <td>{{ incidence.6}}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="/justification/{{ incidence.7 }}">Revisar</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Proceso</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Asignado a</th>
+                            <th>Fecha</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+</script>
+{% endblock %}

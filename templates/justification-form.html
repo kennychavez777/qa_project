@@ -10,40 +10,55 @@
         <h3 style="margin-top: 50px;">Detalle de incidencia </h3>
         <div class=" row col-md-12 col-lg-12 space-top">
             <div class="col-md-12 col-lg-12">
-                <p><strong>Asignado por: </strong>{{ history.3 }}</p>
+                <p><strong>Asignado por: </strong>{{ data.0.3 }}</p>
             </div>
             <div class="col-md-6 col-lg-6">
-                <p><strong>Flujo: </strong>{{ history.8 }}</p>
+                <p><strong>Flujo: </strong>{{ data.0.8 }}</p>
             </div>
             <div class="col-md-6 col-lg-6">
-                <p><strong>Proceso: </strong>{{ history.0 }}</p>
+                <p><strong>Proceso: </strong>{{ data.0.0 }}</p>
             </div>
             <div class="col-md-6 col-lg-6">
-                <p><strong>Tipo: </strong>{{ history.1 }}</p>
+                <p><strong>Tipo: </strong>{{ data.0.1 }}</p>
             </div>
             <div class="col-md-6 col-lg-6">
-                <p><strong>Estado: </strong>{{ history.6 }}</p>
+                <p><strong>Estado: </strong>{{ data.0.6 }}</p>
             </div>
             <div class="col-md-6 col-lg-6">
-                <p><strong>Prioridad: </strong>{{ history.5 }}</p>
+                <p><strong>Prioridad: </strong>{{ data.0.5 }}</p>
             </div>
             <div class="col-md-12 col-lg-12">
-                <p><strong>Descripción: </strong>{{ history.2 }}</p>
+                <p><strong>Descripción: </strong>{{ data.0.2 }}</p>
             </div>
             <hr class="space-top">
             <div class="col-md-12 col-lg-12">
                 <form action="/save-justificaton" method="POST">
-                    <input type="hidden" name="history_id" value="{{ history.7 }}">
-                    <p><strong>Justificación: </strong></p>
-                    {% if history.9 %}
-                    <textarea class="form-control" name="justificacion" rows="4" disabled="true">{{ history.9 }}</textarea>
+                    <input type="hidden" name="history_id" value="{{ data.0.7 }}">
+                    {% if data.1.5 == data.1.6 %}
+                    <textarea class="form-control" name="justificacion" rows="4" hidden="true"></textarea>
+                    <p><strong>Reasignar a:</strong></p>
+                    <select class="form-select user-select" aria-label="Seleccionar proceso" name="id_usuario_afectado">
+                        
+                        <option selected>Seleccione un usuario</option>
+                        {% for user in data.2 %}
+                            <option value="{{ user.0 }}">{{ user.1}}</option>
+                        {% endfor%}
+                    </select>
+                    <button type="submit" class="btn btn-success space-top" name="response" value="Creado">Guardar</button>
+                    {% else %}
+                    <p class="space-top"><strong>Justificación: </strong></p>
+                    {% if data.0.9 %}
+                    <textarea class="form-control" name="justificacion" rows="4" disabled="true">{{ data.0.9 }}</textarea>
                     <button type="submit" class="btn btn-success space-top" name="response" value="Aceptado" disabled="true">Aceptar</button>
                     <button type="submit" class="btn btn-danger space-top" name="response" value="Rechazado" disabled="true">Rechazar</button>
+                    <button type="submit" class="btn btn-info space-top" style="color: #fff;" name="response" value="Regresado" disabled="true">Regresar</button>
                     {% else %}
                     <textarea class="form-control" name="justificacion" rows="4"></textarea>
                     <button type="submit" class="btn btn-success space-top" name="response" value="Aceptado" >Aceptar</button>
                     <button type="submit" class="btn btn-danger space-top" name="response" value="Rechazado">Rechazar</button>
+                    <button type="submit" class="btn btn-info space-top" style="color: #fff;" name="response" value="Regresado">Regresar</button>
                     {% endif %}
+                    {% endif%}
                 </form>
             </div>
         </div>
